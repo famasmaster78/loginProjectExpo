@@ -1,21 +1,71 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+
+// Network / AXIOS
+import axios from 'axios';
+
+// Import Login til test af props
+import Login from "./app/components/Login";
+import NavBar from "./app/components/NavBar";
+
+/* Opret const til URL */
+let backendUrl = "http://192.168.1.147:4080";
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+  // States
+  const [loggedIn, setloggedIn] = useState(0);
+  const [loginUser, setloginUser] = useState("");
+
+  // GetLogin
+  const handleGetLogin = () => {
+  		axios.get(`${backendUrl}/GetLogin`)
+  		.then(res => res.data)
+  		.then(data => {
+  			/* alert(JSON.stringify(data)); */
+
+  			// Opdater state
+  			setloggedIn(data.success);
+  			setloginUser(data.data.USER);
+
+  		});
+  }
+
+  /* Når component mountes */
+	useEffect(() => {
+		// Get Login Status
+		handleGetLogin();
+	}, []);
+
+  return(
+    <View>
+
+      {/* Tjek om bruger er logget ind */}
+      {loggedIn ? (
+
+        // Brugeren er logget ind
+        // Vis tabs i toppen
+
+        <View>
+
+          {/* NavBar */}
+          <NavBar loggedIn={[loggedIn,setloggedIn]} loginUser={[loginUser,setloginUser]} backendUrl={backendUrl} />
+
+          <Text>
+            Logget ind!
+          </Text>
+        </View>
+
+      ): (
+
+        // Bruger er ikke logget ind, vis login component.
+        <Login loggedIn={[loggedIn,setloggedIn]} loginUser={[loginUser,setloginUser]} backendUrl={backendUrl} />
+
+      )}
+
+
+
+    </View>
+  )
+
+}
