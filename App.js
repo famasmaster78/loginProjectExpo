@@ -38,25 +38,16 @@ export default function App() {
 	}, []);
 
   return(
-    <View>
+    <View style={{ flex: 1 }}>
 
       {/* Tjek om bruger er logget ind */}
       {loggedIn ? (
 
         // Brugeren er logget ind
         // Vis tabs i toppen
+        <NavBar loggedIn={[loggedIn,setloggedIn]} loginUser={[loginUser,setloginUser]} backendUrl={backendUrl} />
 
-        <View>
-
-          {/* NavBar */}
-          <NavBar loggedIn={[loggedIn,setloggedIn]} loginUser={[loginUser,setloginUser]} backendUrl={backendUrl} />
-
-          <Text>
-            Logget ind!
-          </Text>
-        </View>
-
-      ): (
+      ) : (
 
         // Bruger er ikke logget ind, vis login component.
         <Login loggedIn={[loggedIn,setloggedIn]} loginUser={[loginUser,setloginUser]} backendUrl={backendUrl} />

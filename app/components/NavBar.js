@@ -1,45 +1,24 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import * as React from 'react';
+import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
-function ATab() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>A Tab!</Text>
-    </View>
-  );
-}
+// Importer skærmene
+import Home from "./NavBarScreens/Home";
+import Film from "./NavBarScreens/Film";
+import Serier from "./NavBarScreens/Serier";
+import Settings from "./NavBarScreens/Settings";
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function NavBar() {
+export default function Navigator(props) {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        initialRouteName="Feed"
-        tabBarOptions={{
-          activeTintColor: '#e91e63',
-          labelStyle: { fontSize: 12 },
-          style: { backgroundColor: 'powderblue' },
-        }}
-      >
-        <Tab.Screen
-          name="Feed"
-          component={ATab}
-          options={{ tabBarLabel: 'Home' }}
-        />
-        <Tab.Screen
-          name="Notifications"
-          component={ATab}
-          options={{ tabBarLabel: 'Updates' }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ATab}
-          options={{ tabBarLabel: 'Profile' }}
-        />
+      <Tab.Navigator>
+        <Tab.Screen name="Hjem" children={()=><Home loggedIn={[props.loggedIn[0],props.loggedIn[1]]} loginUser={[props.loginUser[0], props.loginUser[1]]} backendUrl={props.backendUrl} />} />
+        <Tab.Screen name="Film" children={()=><Film loggedIn={[props.loggedIn[0],props.loggedIn[1]]} loginUser={[props.loginUser[0], props.loginUser[1]]} backendUrl={props.backendUrl} />} />
+        <Tab.Screen name="Serier" children={()=><Serier loggedIn={[props.loggedIn[0],props.loggedIn[1]]} loginUser={[props.loginUser[0], props.loginUser[1]]} backendUrl={props.backendUrl} />} />
+        <Tab.Screen name="Settings" children={()=><Settings loggedIn={[props.loggedIn[0],props.loggedIn[1]]} loginUser={[props.loginUser[0], props.loginUser[1]]} backendUrl={props.backendUrl} />} />
       </Tab.Navigator>
     </NavigationContainer>
   );
