@@ -13,6 +13,8 @@ import axios from "axios";
 
 export default function Film(props) {
 
+  console.log("Filmjs", props);
+
   // Opret state
   const [allFilm, setAllFilm] = useState("");
   const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ export default function Film(props) {
 
   // GetMovies
   const handleGetMovies = () => {
-  		axios.get(`${props.backendUrl}/GetAllMovies`)
+  		axios.get(`${props.route.params.props.backendUrl}/GetAllMovies`)
   		.then(res => res.data)
   		.then(data => {
   			/* alert(JSON.stringify(data)); */
@@ -86,6 +88,9 @@ export default function Film(props) {
                 />
                 <Button
                   title="Afspil"
+                  onPress={() => props.navigation.navigate("Player",{
+                    film: film
+                  })}
                 />
 
               </View>

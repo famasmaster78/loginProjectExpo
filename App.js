@@ -11,6 +11,7 @@ import NavBar from "./app/components/NavBar";
 /* Opret const til URL */
 let backendUrl = "http://192.168.1.147:4080";
 
+// App
 export default function App() {
 
   // States
