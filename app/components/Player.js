@@ -13,6 +13,16 @@ export default function Player(props) {
   // Opret variable til film Info
   var filmInfo = props.route.params.film;
 
+  // Håndter Buffering af video
+  const onBuffer = () => {
+    console.log("Buffering...");
+  }
+
+  // Håndter fejl ved indlæsning af video
+  const onError = () => {
+    console.log("Error loading video...");
+  }
+
   return (
 
   	<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -22,13 +32,22 @@ export default function Player(props) {
 
     );
 
-    <Video source={{uri: "background"}}   // Can be a URL or a local file.
+    <Video source={{uri: `${encodeURI(`http://film.famas.ml/media/film/${filmInfo.title}/${filmInfo.video}`)}`}}   // Can be a URL or a local file.
        ref={(ref) => {
-         this.player = ref
+         player = ref
        }}                                      // Store reference
+       onBuffer={onBuffer}                // Callback when remote video is buffering
+       onError={videoError}               // Callback when video cannot be loaded
+       style={styles.backgroundVideo}
      />
   }
 
 const styles = StyleSheet.create({
-
+  backgroundVideo: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+  },
 });
