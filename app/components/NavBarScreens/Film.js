@@ -88,9 +88,12 @@ export default function Film(props) {
                 />
                 <Button
                   title="Afspil"
-                  onPress={() => props.navigation.navigate("Player",{
-                    film: film
-                  })}
+                  onPress={() => {
+                    props.navigation.navigate("Player",{
+                      film: film
+                    });
+
+                  }}
                 />
 
               </View>

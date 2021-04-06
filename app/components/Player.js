@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 
 // Import Video Afspiller
-import Video from "react-native-video";
+// At the top where our imports are...
+import VideoPlayer from 'react-native-video-controls';
 
 export default function Player(props) {
 
@@ -13,33 +14,41 @@ export default function Player(props) {
   // Opret variable til film Info
   var filmInfo = props.route.params.film;
 
-  // Håndter Buffering af video
-  const onBuffer = () => {
-    console.log("Buffering...");
-  }
+  // Opret var til videoPath
+  var videoPath = encodeURI(`https://film.famas.ml/media/film/${filmInfo.title}/${filmInfo.video}`);
 
-  // Håndter fejl ved indlæsning af video
-  const onError = () => {
-    console.log("Error loading video...");
-  }
+  // Opret var til PosterPath / BilledePath
+  var posterPath = encodeURI(`https://film.famas.ml/media/film/${filmInfo.title}/${filmInfo.billede}`);
+
+  console.log("VideoPath", videoPath);
+
+  // Håndter Buffering af video
+  // Opdater title til navigation
+  /* Når component mountes */
+	useEffect(() => {
+
+    props.navigation.setOptions({ title: filmInfo.title})
+
+	}, []);
 
   return (
 
   	<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  		<Text>Velkommen Player!</Text>
-      <Text>Afspilning af film: {filmInfo.title}</Text>
+  		<View style={{ margin: 10, justifyContent: "center", alignItems: "center", display: "none"}}>
+        <Text>Velkommen Player!</Text>
+        <Text>Afspiller film</Text>
+      </View>
+      <VideoPlayer
+        source={{uri: videoPath}}
+        poster={posterPath}
+        style={{ flex: 1, width: "100%", height: "100%", backgroundColor: "black", }}
+        paused={true}
+        navigator={props.navigation}
+        tapAnywhereToPause={true}
+      />
   	</View>
 
     );
-
-    <Video source={{uri: `${encodeURI(`http://film.famas.ml/media/film/${filmInfo.title}/${filmInfo.video}`)}`}}   // Can be a URL or a local file.
-       ref={(ref) => {
-         player = ref
-       }}                                      // Store reference
-       onBuffer={onBuffer}                // Callback when remote video is buffering
-       onError={videoError}               // Callback when video cannot be loaded
-       style={styles.backgroundVideo}
-     />
   }
 
 const styles = StyleSheet.create({

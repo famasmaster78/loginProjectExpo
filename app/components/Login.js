@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, TextInput } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, TouchableHighlight, TouchableNativeFeedback } from 'react-native';
 
 // Netowork / AXIOS
 import axios from "axios";
@@ -28,19 +28,17 @@ export default function Login(props) {
 
 			// Tjek svaret modtaget tilbage.
 			if (data.success) {
-				// alert("Logget ind");
-
-				// GetLogin igen
-				// handleGetLogin();
-
-        // alert(JSON.stringify(data));
 
         // Opdater props
         props.loggedIn[1](data.success);
         props.loginUser[1](data.data.USER);
 
 			}else {
+
 				alert("Kunne ikke logge ind!");
+
+        // Nulstil password TextInput
+        inputPassword.clear();
 			}
 
 		})
@@ -73,6 +71,12 @@ export default function Login(props) {
 
 	}
 
+  // create refs
+  // TextInput refs
+  var inputUsername = React.createRef();
+  var inputPassword = React.createRef();
+  var inputSubmit = React.createRef();
+
   return (
     <View>
 
@@ -98,26 +102,47 @@ export default function Login(props) {
             </Text>
 
             <Text>Brugernavn</Text>
-    				<TextInput
-    					style={styles.textInput}
-    					placeholder="palle2328"
-    					onChangeText={text => setFormUsername(text)}
-    				/>
+            <TouchableNativeFeedback
+              underlayColor="green"
+              onPress={() => inputUsername.focus()}>
+              <View>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="palle2328"
+                  onChangeText={text => setFormUsername(text)}
+                  ref={(ref) => { inputUsername = ref }}
+                  onSubmitEditing={() => inputPassword.focus()}
+                  returnKeyType={"next"}
+                  blurOnSubmit={false}
+                />
+              </View>
+            </TouchableNativeFeedback>
     				<Text>Adgangskode</Text>
-    				<TextInput
-    					style={styles.textInput}
-    					placeholder="********"
-    					onChangeText={text => setFormPassword(text)}
-    					secureTextEntry={true}
-    				/>
-    				<View style={{marginTop: 10}}>
-    					<Button
-    						onPress={() => handleFormSubmit()}
-    						title={isLoggedIn()}
-    						color="royalblue"
-    						disabled={isFormValid()}
-    					/>
-    				</View>
+            <TouchableNativeFeedback
+              underlayColor="green"
+              onPress={() => inputPassword.focus()}
+            >
+              <View>
+                <TextInput
+                  style={styles.textInput}
+                  placeholder="********"
+                  onChangeText={text => setFormPassword(text)}
+                  secureTextEntry={true}
+                  ref={(ref) => { inputPassword = ref }}
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => handleFormSubmit()}
+                />
+              </View>
+            </TouchableNativeFeedback>
+            <View style={{marginTop: 10}}>
+              <Button
+                onPress={() => handleFormSubmit()}
+                title={isLoggedIn()}
+                color="royalblue"
+                disabled={isFormValid()}
+                ref={(ref) => { inputSubmit = ref }}
+              />
+            </View>
           </View>
         </View>
 
